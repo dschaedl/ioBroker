@@ -166,16 +166,17 @@ with an array of children IDs - if parent is used children is mandatory and vice
 
 attributes:
 
-* common.type  (optional - (default is mixed==any type) (possible values: number, string, boolean, array, object, mixed)
-* common.min   (optional)
-* common.max   (optional)
-* common.unit  (optional)
-* common.def   (optional - the default value)
-* common.desc  (optional, string)
-* common.read  (boolean, mandatory) - true if state is readable
-* common.write (boolean, mandatory) - true if state is writeable
-* common.role  (string, mandatory) - role of the state (used in user interfaces to indicate which widget to choose, see below)
+* common.type   (optional - (default is mixed==any type) (possible values: number, string, boolean, array, object, mixed)
+* common.min    (optional)
+* common.max    (optional)
+* common.unit   (optional)
+* common.def    (optional - the default value)
+* common.desc   (optional, string)
+* common.read   (boolean, mandatory) - true if state is readable
+* common.write  (boolean, mandatory) - true if state is writeable
+* common.role   (string,  mandatory) - role of the state (used in user interfaces to indicate which widget to choose, see below)
 * common.states (optional) attribut of type number with array of possible states
+* common.workingID (string, optional) - if this state has helper state WORKING. Here must be written the full name or just the last part if the first parts are the same with actual. Used for HM.LEVEL and normally has value "WORKING"
 
 
 ##### state common.history
@@ -210,14 +211,14 @@ possible values:
 * list.horizontal
 * ...
 
-* value             (common.type=number, common.oper.write=false)
-* value.temperature (common.type=number, common.oper.write=false, common.unit='°C' or '°F' or 'K')
-* value.humidity    (common.type=number, common.oper.write=false)
-* value.brightness  (common.type=number, common.oper.write=false)
-* value.min         (common.type=number, common.oper.write=false)
-* value.max         (common.type=number, common.oper.write=false)
-* value.default     (common.type=number, common.oper.write=false)
-* value.battery     (common.type=number, common.oper.write=false) - battery level
+* value             (common.type=number, common.write=false)
+* value.temperature (common.type=number, common.write=false, common.unit='°C' or '°F' or 'K')
+* value.humidity    (common.type=number, common.write=false)
+* value.brightness  (common.type=number, common.write=false)
+* value.min         (common.type=number, common.write=false)
+* value.max         (common.type=number, common.write=false)
+* value.default     (common.type=number, common.write=false)
+* value.battery     (common.type=number, common.write=false) - battery level
 * ...
 * value.power.consumption or power.consumption ?
 
@@ -245,7 +246,7 @@ possible values:
 * indicator.maintenance.unreach
 * indicator.maintenance.alarm
 
-* level                 (common.type=number, common.oper.write=true)
+* level                 (common.type=number, common.write=true)
 * level.dimmer
 * level.blind
 * level.temperature
@@ -257,24 +258,19 @@ possible values:
 * level.color.luminance
 * level.color.temperature
 * ...
+* level.volume          (common.type=number, common.write=true, min=0, max=100)
 
-* switch (common.type=boolean, common.oper.write=true)
+* switch (common.type=boolean, common.write=true)
 * 
 
 * ...
 * text.phone_number
 * 
-* adapter.messagebox     (common.type=object, common.oper.write=true) used to send messages to email, pushover and other adapters
-* adapter.wakeup         (common.type=boolean, common.oper.write=true) wake up adapter from suspended mode
-* adapter.run            (common.type=boolean, common.oper.write=true) start or stop adapter, that supoprt it
+* adapter.messagebox     (common.type=object, common.write=true) used to send messages to email, pushover and other adapters
+* adapter.wakeup         (common.type=boolean, common.write=true) wake up adapter from suspended mode
+* adapter.run            (common.type=boolean, common.write=true) start or stop adapter, that supoprt it
 
 #### channel
-
-Additional to mandatory object attributes:
-
-* children - (optional) Array with children IDs (children should be objects of type state)
-* parent  - (optional) Parent device ID (parent should be object of type device)
-
 
 ##### channel common.role - (HQ: Is it mandatory? I think no.)
 
@@ -289,7 +285,7 @@ possible values:
 * media         - common media channel
 * media.music   - media player, like SONOS, YAMAHA and so on
 * media.tv      - TV 
-* media...
+* media.tts     - text to speech
 
 * thermo        - Monitor or control the temperature, humidity and so on
 * thermo.heat 
@@ -334,7 +330,7 @@ possible values:
 #### Channel descriptions
 ~~The names of the attributes can be free defined by adapter, except ones written with **bold** font.~~
 
-"W" - common.oper.write=true
+"W" - common.write=true
 
 "M" - Mandatory
 
@@ -560,15 +556,10 @@ possible values:
 
 ...
 
-
 #### device
-
-* children - (optional) array of children IDs (children should be objects of type channel or state)
 
 #### enum
 
-* parent - (optional) parent ID (parent has to be object of type enum)
-* children - (optional) array of children IDs (children have to be objects of type enum)
 * common.members - (optional) array of enum member IDs
 
 
@@ -609,6 +600,7 @@ id *system.adapter.&lt;adapter.name&gt;*
 * common.onlyWWW            - (optional) say to controller, that adapter has only html files and no main.js, like rickshaw
 * common.singleton          - (optional) adapter can be installed only once in whole system
 * common.singletonHost      - (optional) adapter can be installed only once on one host
+* common.allowInit          - (optional) allow scheduled adapter start once after configuration changed and then by schedule
 
 
 #### instance
